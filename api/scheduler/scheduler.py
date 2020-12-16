@@ -1,17 +1,17 @@
-
 from apscheduler.schedulers.background import BackgroundScheduler
 
 # Local schedules
-from api.scheduler.schedules import update_free_games
+# from api.scheduler.schedules import update_free_games
+
 
 class ScheduledTask:
     def __init__(
         self,
         function,
-        seconds = 0,
-        minutes = 0,
-        hours = 0,
-        call_at_first = False,
+        seconds=0,
+        minutes=0,
+        hours=0,
+        call_at_first=False,
     ):
         if call_at_first:
             function()
@@ -29,10 +29,17 @@ class ScheduledTask:
     def get_delay(self):
         return self.__callback_delay
 
+
+def empty_task():
+    pass
+
+
 # Set all scheduled tasks
 SCHEDULED_TASKS = [
-    ScheduledTask(update_free_games.update_free_games, hours=1, call_at_first=True),
+    ScheduledTask(empty_task, hours=10)
+    # ScheduledTask(update_free_games.update_free_games, hours=1, call_at_first=True),
 ]
+
 
 # Start all scheduled tasks
 def start_scheduler():
@@ -41,9 +48,9 @@ def start_scheduler():
         interval_delay = task.get_delay()
         scheduler.add_job(
             task.get_function(),
-            'interval',
-            seconds=interval_delay['seconds'],
-            minutes=interval_delay['minutes'],
-            hours=interval_delay['hours']
+            "interval",
+            seconds=interval_delay["seconds"],
+            minutes=interval_delay["minutes"],
+            hours=interval_delay["hours"],
         )
     scheduler.start()
