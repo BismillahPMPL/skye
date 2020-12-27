@@ -39,6 +39,7 @@ jobs:
       with:
           heroku_api_key: ${{ secrets.STAGING_HEROKU_API_TOKEN }}
           heroku_app_name: ${{ secrets.STAGING_HEROKU_APP_NAME }}
+          branch: staging
   load-test:
     runs-on: ubuntu-latest
     steps:
