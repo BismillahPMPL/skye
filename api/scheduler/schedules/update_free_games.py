@@ -4,7 +4,7 @@ import api.commons as commons
 import re
 from linebot.models import TextSendMessage
 from api.models import Game, Listener
-from django.db.utils import OperationalError
+from django.db.utils import OperationalError, ProgrammingError
 
 
 # Simplify bot variables
@@ -200,5 +200,5 @@ def update_free_games():
 
         if len(new_free_games) > 0:
             notify_new_free_games(new_free_games)
-    except OperationalError:
+    except (OperationalError, ProgrammingError):
         pass
