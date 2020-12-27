@@ -63,8 +63,7 @@ jobs:
       env:
         HOST: ${{ secrets.STAGING_URL }}
       run: |
-        ls
-        locust --host=$HOST --headless -u 50 -r 10 -t30s --only-summary --csv=output
+        locust --host=$HOST --headless -u 10 -r 5 -t30s --only-summary --csv=output
         python manage.py flush
   deploy-to-production:
     needs: [lint, load-test]
