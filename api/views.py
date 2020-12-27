@@ -1,5 +1,7 @@
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
+from django.utils import timezone
+from django.http import JsonResponse
 
 # Django library
 from django.http import (
@@ -12,7 +14,9 @@ from django.conf import settings
 
 # Line bot library
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models.sources import SourceUser
+
 
 # Load local env
 from dotenv import load_dotenv
@@ -88,20 +92,42 @@ def api(request):
     else:
         return HttpResponseBadRequest()
 
-
-@BOT_HANDLER.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+def reply_message(event):
     data = parse_message(event.message.text)
 
     if not data["is_valid"]:
         return
 
     message = controller(event, data["command"], data["options"])
+    return message
 
+
+@BOT_HANDLER.add(MessageEvent, message=TextMessage)
+def handle_message(event):
     BOT.reply_message(
         event.reply_token,
-        message,
+        reply_message(event),
     )
+
+def controller_view(request, command):
+    timestamp = timezone.now().replace(tzinfo=timezone.utc).timestamp()
+    source = SourceUser(user_id = 'fake_id')
+    message = TextMessage(
+        id = 'message_id',
+        text = command,
+    )
+
+    event = MessageEvent(
+        'user',
+        timestamp,
+        source,
+        reply_token = 'reply_token_id',
+        message = message,
+    )
+
+    return JsonResponse({
+        'reply': reply_message(event).__dict__,
+    })
 
 
 start_scheduler()
