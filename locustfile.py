@@ -1,5 +1,6 @@
 from locust import HttpUser, between, task
 
+
 class MinimumLoadTest(HttpUser):
     wait_time = between(5, 15)
 
