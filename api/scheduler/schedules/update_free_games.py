@@ -202,4 +202,3 @@ def update_free_games():
             notify_new_free_games(new_free_games)
     except OperationalError:
         pass
-    
