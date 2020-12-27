@@ -40,7 +40,6 @@ jobs:
       env:
         STAGING_HEROKU_API_TOKEN: ${{ secrets.STAGING_HEROKU_API_TOKEN }}
         STAGING_HEROKU_APP_NAME: ${{ secrets.STAGING_HEROKU_APP_NAME }}
-      if: github.ref == 'refs/heads/dev/add-load-test' && job.status == 'success'
       run: |
         git remote add heroku https://heroku:$STAGING_HEROKU_API_TOKEN@git.heroku.com/$STAGING_HEROKU_APP_NAME.git
         git push heroku HEAD:main
