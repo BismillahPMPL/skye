@@ -63,7 +63,7 @@ jobs:
     - name: Load test
       env:
         HOST: ${{ secrets.STAGING_URL }}
-      run: /
+      run: |
         ls
         locust --host=$HOST --headless -u 50 -r 10 -t30s --only-summary --csv=output
         python manage.py flush
