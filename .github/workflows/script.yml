@@ -41,7 +41,7 @@ jobs:
         STAGING_HEROKU_APP_NAME: ${{ secrets.STAGING_HEROKU_APP_NAME }}
       run: |
         git remote add heroku https://heroku:$STAGING_HEROKU_API_TOKEN@git.heroku.com/$STAGING_HEROKU_APP_NAME.git
-        git push heroku HEAD:master -f
+        git push heroku master -f
   load-test:
     runs-on: ubuntu-latest
     steps:
