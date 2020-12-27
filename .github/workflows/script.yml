@@ -22,6 +22,7 @@ jobs:
         pip install flake8
         flake8
   deploy-to-staging:
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -44,6 +45,7 @@ jobs:
         git remote add heroku https://heroku:$STAGING_HEROKU_API_TOKEN@git.heroku.com/$STAGING_HEROKU_APP_NAME.git
         git push heroku HEAD:master
   load-test:
+    needs: [deploy-to-staging]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -64,6 +66,7 @@ jobs:
         locust --host=$HOST --headless -u 50 -r 10 -t30s --only-summary --csv=output
         python manage.py flush
   deploy-to-production:
+    needs: [lint, load-test]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
