@@ -43,7 +43,7 @@ jobs:
       if: github.ref == 'refs/heads/dev/add-load-test' && job.status == 'success'
       run: |
         git remote add heroku https://heroku:$STAGING_HEROKU_API_TOKEN@git.heroku.com/$STAGING_HEROKU_APP_NAME.git
-        git push heroku HEAD:master
+        git push heroku HEAD:main
   load-test:
     needs: [deploy-to-staging]
     runs-on: ubuntu-latest
@@ -58,11 +58,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install -r requirements.txt
         pip install -r requirements-dev.txt
     - name: Load test
       env:
         HOST = {{ secrets.STAGING_URL }}
       run: /
+        ls
         locust --host=$HOST --headless -u 50 -r 10 -t30s --only-summary --csv=output
         python manage.py flush
   deploy-to-production:
@@ -87,4 +89,4 @@ jobs:
       if: github.ref == 'refs/heads/master' && job.status == 'success'
       run: |
         git remote add heroku https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git
-        git push heroku HEAD:master -f
+        git push heroku HEAD:main
