@@ -36,8 +36,9 @@ def empty_task():
 
 # Set all scheduled tasks
 SCHEDULED_TASKS = [
-    ScheduledTask(empty_task, hours=10)
+
     # ScheduledTask(update_free_games.update_free_games, hours=1, call_at_first=True),
+    # ScheduledTask(empty_task, hours=10)
 ]
 
 
